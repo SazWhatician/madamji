@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Memories!</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-barba="wrapper">
+  
+  <div id="audio-control" class="brutal-border brutal-shadow">🎵</div>
+  
+  <div id="cat-guide-container">
+    <div class="speech-bubble" id="cat-speech">Watch this!</div>
+    <div id="cat-svg-container"></div>
+  </div>
+
+  <div class="transition-screen">
+    <svg id="heart-mask" viewBox="0 0 100 100" style="width: 0; height: 0; transform-origin: center;">
+      <path d="M50 85 C 0 50, 0 20, 25 10 C 38 5, 50 15, 50 20 C 50 15, 62 5, 75 10 C 100 20, 100 50, 50 85 Z" fill="#EF476F" />
+    </svg>
+  </div>
+
+  <main data-barba="container" data-barba-namespace="gallery">
+    <div class="page-container flex-center flex-col relative w-full min-h-screen pt-24 pb-20">
+      
+      <div class="fixed top-8 left-8 z-50">
+        <a href="page2.html" class="brutal-btn secondary">⬅️ Back</a>
+      </div>
+      <div class="fixed top-8 right-8 z-50">
+        <a href="page4.html" id="next-btn-3" class="brutal-btn primary hide-initially opacity-0 pointer-events-none">Next ➡️</a>
+      </div>
+
+      <!-- TV Container -->
+      <div id="tv-container" class="tv-frame p-4 md:p-8 w-11/12 max-w-3xl flex justify-between items-center transition-all duration-1000 z-40 bg-[var(--mint)]">
+        
+        <div class="tv-screen w-3/4 aspect-video relative">
+          <!-- Video -->
+          <video id="madamji-video" class="w-full h-full object-contain bg-black" controls>
+            <source src="video/madamjiii.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        
+        <!-- TV controls -->
+        <div class="w-1/4 flex flex-col items-center justify-center gap-4 pl-4">
+           <div class="w-16 h-16 rounded-full border-4 border-[var(--dark)] bg-[#e0e0e0] flex-center brutal-shadow cursor-pointer active:scale-95" id="tv-knob-1">
+             <div class="w-2 h-8 bg-gray-500 rounded-full"></div>
+           </div>
+           <div class="w-12 h-12 rounded-full border-4 border-[var(--dark)] bg-[#e0e0e0] flex-center brutal-shadow cursor-pointer active:scale-95 mt-4" id="tv-knob-2">
+             <div class="w-2 h-6 bg-gray-500 rounded-full rotate-45"></div>
+           </div>
+           
+           <button id="skip-video-btn" class="mt-8 font-bold text-sm border-2 border-[var(--dark)] px-2 py-1 bg-white brutal-shadow active:translate-y-1 active:translate-x-1 active:shadow-none">Skip Data</button>
+        </div>
+      </div>
+
+      <!-- Photo Gallery (Hidden initially) -->
+      <div id="photo-gallery" class="w-full max-w-6xl mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4" style="display: none;">
+        <!-- Photos injected via JS -->
+      </div>
+
+    </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://unpkg.com/@barba/core"></script>
+  <script src="app.js"></script>
+</body>
+</html>

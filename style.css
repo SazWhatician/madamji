@@ -1,0 +1,369 @@
+@import url('https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter:wght@400;600;900&family=Shrikhand&display=swap');
+
+:root {
+  --sunflower: #FFD166;
+  --orange: #EE964B;
+  --pink: #EF476F;
+  --mint: #06D6A0;
+  --dark: #073B4C;
+  --light: #FCF8F2;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--light);
+  color: var(--dark);
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  /* Hiding default cursor for the custom one */
+  cursor: none !important;
+  /* Crazy scrolling striped background */
+  background: repeating-linear-gradient(
+    45deg,
+    var(--light),
+    var(--light) 20px,
+    #f4ecdf 20px,
+    #f4ecdf 40px
+  );
+  background-size: 56px 56px;
+  animation: bgScroll 4s linear infinite;
+}
+
+@keyframes bgScroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 56px 56px; }
+}
+
+* {
+  cursor: none !important;
+}
+
+/* Custom Cursor Elements */
+#custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 20px;
+  height: 20px;
+  background-color: var(--pink);
+  border: 3px solid var(--dark);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 100000;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: normal;
+}
+
+#custom-cursor-follower {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  border: 4px dashed var(--dark);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s;
+  animation: spinCursor 4s linear infinite;
+}
+
+@keyframes spinCursor {
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Make hovered style for cursor */
+.cursor-hover #custom-cursor {
+  background-color: var(--sunflower);
+  transform: translate(-50%, -50%) scale(1.5);
+}
+
+.cursor-hover #custom-cursor-follower {
+  background-color: var(--mint);
+  border: 4px solid var(--dark);
+  mix-blend-mode: difference;
+  transform: translate(-50%, -50%) scale(2);
+  animation: none;
+}
+
+h1, h2, h3, .heading {
+  font-family: 'Shrikhand', cursive;
+  letter-spacing: 1px;
+}
+
+.handwriting {
+  font-family: 'Gochi Hand', cursive;
+  font-size: 1.5rem;
+}
+
+/* Brutalist Utilities */
+.brutal-border {
+  border: 4px solid var(--dark);
+}
+
+.brutal-shadow {
+  box-shadow: 6px 6px 0px var(--dark);
+}
+
+.brutal-shadow-lg {
+  box-shadow: 10px 10px 0px var(--dark);
+}
+
+/* Insane Button Hover Effects */
+.brutal-btn {
+  background-color: var(--pink);
+  color: white;
+  font-family: 'Shrikhand', cursive;
+  font-size: 1.2rem;
+  padding: 12px 28px;
+  border: 4px solid var(--dark);
+  box-shadow: 6px 6px 0px var(--dark);
+  border-radius: 12px;
+  cursor: none;
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  display: inline-block;
+  /* Will be controlled by GSAP magnet effect, but we set a transition fallback */
+  transition: box-shadow 0.2s;
+  z-index: 10;
+}
+
+/* Glitch/Sliding sweep effect on hover */
+.brutal-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: skewX(-45deg);
+  transition: left 0.4s ease-in-out;
+  z-index: -1;
+}
+
+.brutal-btn:hover::before {
+  left: 150%;
+}
+
+.brutal-btn:hover {
+  box-shadow: 10px 10px 0px var(--dark);
+}
+
+.brutal-btn:active {
+  box-shadow: 0px 0px 0px var(--dark) !important;
+}
+
+.brutal-btn.primary { background-color: var(--sunflower); color: var(--dark); }
+.brutal-btn.secondary { background-color: var(--mint); }
+
+/* Heart Transition Screen */
+.transition-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+  background: transparent;
+}
+
+.heart-mask {
+  width: 10px;
+  height: 10px;
+  background-color: var(--pink);
+  transform: scale(0);
+  clip-path: path('M5.000 2.853s-2.185-3.853-5-3.853c-3 0-5 2.5-5 5.5 0 3.791 4.254 7.202 10 10.5 5.746-3.298 10-6.709 10-10.5 0-3-2-5.5-5-5.5-2.815 0-5 3.853-5 3.853z');
+}
+
+/* Cat Guide Component */
+#cat-guide-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 140px;
+  z-index: 9000;
+  pointer-events: auto;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#cat-guide-container:hover {
+  transform: scale(1.2) rotate(-5deg);
+}
+
+.cat-svg {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(6px 6px 0px var(--dark));
+}
+
+.speech-bubble {
+  position: absolute;
+  top: -80px;
+  left: -80px;
+  background: white;
+  border: 4px solid var(--dark);
+  box-shadow: 6px 6px 0px var(--dark);
+  border-radius: 25px 25px 0px 25px;
+  padding: 12px 16px;
+  font-family: 'Gochi Hand', cursive;
+  font-size: 1.25rem;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  min-width: 150px;
+  /* Crazy Wiggle Text inside bubble */
+  animation: bubbleFloat 2s ease-in-out infinite;
+}
+
+@keyframes bubbleFloat {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-5px) rotate(2deg); }
+}
+
+/* Audio control - spin when playing */
+#audio-control {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 60px;
+  height: 60px;
+  background: white;
+  border-radius: 50%;
+  z-index: 9000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8rem;
+  transition: transform 0.3s;
+}
+
+#audio-control:hover {
+  transform: scale(1.2) rotate(15deg);
+}
+
+.playing {
+  animation: spinRecord 3s linear infinite;
+}
+@keyframes spinRecord {
+  100% { transform: rotate(360deg); }
+}
+
+/* Specific Page Elements */
+.polaroid {
+  background: white;
+  padding: 12px 12px 48px 12px;
+  border: 4px solid var(--dark);
+  box-shadow: 8px 8px 0px var(--dark);
+  /* Fallback 3D perspective, will be enhanced with JS */
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
+}
+
+.polaroid:hover {
+  z-index: 100;
+}
+
+.polaroid img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 4px solid var(--dark);
+  pointer-events: none; /* so mouse interaction targets polaroid fully */
+}
+
+.polaroid p {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 1.2rem;
+  pointer-events: none;
+}
+
+/* Wobbly TV */
+.tv-frame {
+  background-color: var(--mint);
+  border: 8px solid var(--dark);
+  border-radius: 20px;
+  box-shadow: 16px 16px 0px var(--dark);
+  position: relative;
+  overflow: visible;
+  /* Bouncing TV */
+  animation: tvFloat 6s ease-in-out infinite;
+}
+
+@keyframes tvFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-10px) rotate(-1deg); }
+}
+
+.tv-screen {
+  border: 6px solid var(--dark);
+  background: black;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: inset 0px 0px 10px rgba(255,255,255,0.5);
+}
+
+/* Utility to center totally */
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-container {
+  min-height: 100vh;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+/* Continuous background rotation for suns/decor */
+.spin-slow {
+  animation: spinSlow 10s linear infinite;
+}
+@keyframes spinSlow {
+  100% { transform: rotate(360deg); }
+}
+
+/* Splitting text rubber band animation (Hover) */
+.rubber-band {
+  display: inline-block;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.rubber-band:hover {
+  transform: scale3d(1.25, 0.75, 1);
+  color: var(--mint);
+  z-index: 10;
+  position: relative;
+}
+
+/* Bouquet flower animations */
+@keyframes sparkleFloat {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  25% { transform: scale(1.5) translateY(-5px); opacity: 1; }
+  50% { transform: scale(0.8) translateY(3px); opacity: 0.4; }
+  75% { transform: scale(1.3) translateY(-3px); opacity: 0.9; }
+}
+
+.bouquet-flower:hover {
+  transform: scale(1.1) !important;
+  filter: drop-shadow(4px 4px 2px rgba(0,0,0,0.3)) brightness(1.1) !important;
+}
+
+@keyframes gentleSway {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(2deg); }
+  75% { transform: rotate(-2deg); }
+}
+

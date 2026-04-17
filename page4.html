@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday!</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-barba="wrapper">
+  
+  <div id="audio-control" class="brutal-border brutal-shadow">🎵</div>
+  
+  <div id="cat-guide-container">
+    <div class="speech-bubble" id="cat-speech">Catch the falling hearts!</div>
+    <div id="cat-svg-container"></div>
+  </div>
+
+  <div class="transition-screen">
+    <svg id="heart-mask" viewBox="0 0 100 100" style="width: 0; height: 0; transform-origin: center;">
+      <path d="M50 85 C 0 50, 0 20, 25 10 C 38 5, 50 15, 50 20 C 50 15, 62 5, 75 10 C 100 20, 100 50, 50 85 Z" fill="#EF476F" />
+    </svg>
+  </div>
+
+  <main data-barba="container" data-barba-namespace="minigame">
+    <div class="page-container flex-center flex-col relative w-full h-screen overflow-hidden">
+      
+      <div class="absolute top-8 left-8 z-50">
+        <a href="page3.html" class="brutal-btn secondary">⬅️ Back</a>
+      </div>
+
+      <!-- Minigame Canvas layer -->
+      <canvas id="game-canvas" class="absolute top-0 left-0 w-full h-full z-0 pointer-events-none"></canvas>
+
+      <!-- Score display -->
+      <div class="absolute top-8 right-8 z-20 brutal-card px-4 py-2 text-xl font-bold bg-white">
+        Hearts: <span id="score-display" class="text-[var(--pink)]">0</span>/20
+      </div>
+
+      <!-- Minigame Player Basket -->
+      <div id="basket" class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-5xl z-20" style="touch-action: none; cursor: crosshair;">
+        🧺
+      </div>
+
+      <!-- Birthday Card (Appears after winning state) -->
+      <div id="final-card" class="brutal-card p-8 md:p-12 z-30 max-w-2xl text-center flex flex-col items-center justify-center opacity-0 scale-50 pointer-events-none">
+        <h1 class="text-4xl md:text-6xl text-[var(--pink)] mb-6 font-bold" style="-webkit-text-stroke: 2px #073B4C;">Happy Birthday!</h1>
+        <p class="handwriting text-2xl md:text-3xl text-[var(--dark)] mb-6 leading-relaxed">
+          I hope this year brings you as much joy and happiness as you bring to everyone around you. You are amazing, beautiful, and absolutely perfect. Have the sweetest birthday ever! 🌻💖
+        </p>
+        <div class="flex gap-4">
+           <!-- SVG flowers will be injected here if needed, or simple emojis -->
+           <span class="text-4xl">🌻</span>
+           <span class="text-4xl">💖</span>
+           <span class="text-4xl">🐱</span>
+           <span class="text-4xl">🐶</span>
+        </div>
+        
+        <p class="mt-8 text-sm text-gray-500 font-sans italic">...psst, ask me about the secret words.</p>
+      </div>
+
+      <!-- Overlay hint to use mouse/touch -->
+      <div id="game-hint" class="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 handwriting text-3xl bg-[var(--sunflower)] brutal-border p-4 brutal-shadow z-10 pointer-events-none">
+        Drag the basket to catch hearts! 👆
+      </div>
+
+    </div>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://unpkg.com/@barba/core"></script>
+  <script src="app.js"></script>
+</body>
+</html>
