@@ -1,6 +1,0 @@
-{
-  "buildCommand": "echo 'No build step required'",
-  "outputDirectory": ".",
-  "framework": null,
-  "cleanUrls": true
-}

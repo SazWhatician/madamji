@@ -830,6 +830,193 @@ function initWarning() {
   }
 }
 
+function initLunchDate() {
+  speakCat("Say yes plsss!", "love", 4000);
+
+  const videoPlssss = document.getElementById('lunch-video-plssss');
+  const imgAyyy = document.getElementById('lunch-img-ayyy');
+  const videoJoyy = document.getElementById('lunch-video-joyy');
+  const rejectText = document.getElementById('lunch-reject-text');
+  const yesBtn = document.getElementById('lunch-yes-btn');
+  const noBtn = document.getElementById('lunch-no-btn');
+  const confettiContainer = document.getElementById('lunch-confetti');
+  const buttonsContainer = document.getElementById('lunch-buttons');
+  let noHovered = false;
+  let accepted = false;
+
+  if (videoPlssss) {
+    videoPlssss.play().catch(e => console.log('Autoplay prevented', e));
+  }
+
+  // Floating hearts bg
+  const heartsBg = document.getElementById('lunch-hearts-bg');
+  if (heartsBg) {
+    for (let i = 0; i < 15; i++) {
+      let h = document.createElement('div');
+      h.innerHTML = ['💕', '🌸', '🍕', '✨', '💖'][Math.floor(Math.random() * 5)];
+      h.style.position = 'absolute';
+      h.style.left = Math.random() * 100 + 'vw';
+      h.style.top = Math.random() * 100 + 'vh';
+      h.style.fontSize = (Math.random() * 20 + 16) + 'px';
+      h.style.opacity = '0';
+      heartsBg.appendChild(h);
+      gsap.to(h, {
+        y: -150 - Math.random() * 200,
+        opacity: Math.random() * 0.4 + 0.2,
+        rotation: Math.random() * 360,
+        duration: Math.random() * 3 + 4,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+    }
+  }
+
+  // Entrance animations
+  gsap.fromTo('#lunch-title', { opacity: 0, y: -50, scale: 0.5 }, { opacity: 1, y: 0, scale: 1, duration: 1, ease: "elastic.out(1, 0.5)" });
+  gsap.fromTo('#lunch-media-wrap', { opacity: 0, scale: 0, rotation: -10 }, { opacity: 1, scale: 1, rotation: 0, duration: 1, delay: 0.3, ease: "back.out(1.5)" });
+  gsap.fromTo('#lunch-yes-btn', { opacity: 0, x: -100 }, { opacity: 1, x: 0, duration: 0.8, delay: 0.8, ease: "back.out(1.5)" });
+  gsap.fromTo('#lunch-no-btn', { opacity: 0, x: 100 }, { opacity: 1, x: 0, duration: 0.8, delay: 0.8, ease: "back.out(1.5)" });
+
+  // ---- NO BUTTON: Runaway logic ----
+  function teleportNoBtn() {
+    if (accepted) return;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const btnW = noBtn.offsetWidth;
+    const btnH = noBtn.offsetHeight;
+    const newX = Math.random() * (vw - btnW - 40) + 20;
+    const newY = Math.random() * (vh - btnH - 40) + 20;
+
+    // Move no button to fixed position on screen
+    noBtn.style.position = 'fixed';
+    noBtn.style.zIndex = '9999';
+    gsap.to(noBtn, {
+      left: newX + 'px',
+      top: newY + 'px',
+      rotation: Math.random() * 40 - 20,
+      duration: 0.2,
+      ease: "power4.out"
+    });
+
+    // Switch media to ayyy.jpeg on first hover
+    if (!noHovered) {
+      noHovered = true;
+      videoPlssss.classList.add('hidden');
+      imgAyyy.classList.remove('hidden');
+      rejectText.classList.remove('hidden');
+      gsap.fromTo(imgAyyy, { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "back.out(1.5)" });
+      gsap.fromTo(rejectText, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, delay: 0.2 });
+      speakCat("Hehe no escape!", "happy", 3000);
+    }
+  }
+
+  noBtn.addEventListener('mouseenter', teleportNoBtn);
+  noBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    teleportNoBtn();
+  }, { passive: false });
+
+  // ---- YES BUTTON: Confetti + joy video ----
+  yesBtn.addEventListener('click', () => {
+    if (accepted) return;
+    accepted = true;
+    speakCat("YAAAY! 🎉🎉", "love", 5000);
+
+    // Hide buttons and reject text
+    gsap.to(noBtn, { opacity: 0, scale: 0, duration: 0.3 });
+    gsap.to(rejectText, { opacity: 0, duration: 0.3 });
+    gsap.to(yesBtn, { scale: 1.3, duration: 0.3, ease: "back.out", onComplete: () => {
+      gsap.to(yesBtn, { opacity: 0, scale: 0, duration: 0.3, delay: 0.3 });
+    }});
+
+    // Change title
+    const title = document.getElementById('lunch-title');
+    if (title) {
+      title.innerHTML = "IT'S A DATE! 🥰🍕";
+      gsap.fromTo(title, { scale: 0.5 }, { scale: 1, duration: 0.8, delay: 0.3, ease: "elastic.out(1, 0.4)" });
+    }
+
+    // Switch to joy video
+    setTimeout(() => {
+      videoPlssss.classList.add('hidden');
+      imgAyyy.classList.add('hidden');
+      videoJoyy.classList.remove('hidden');
+      videoJoyy.play().catch(e => console.log('Joy video autoplay prevented', e));
+      gsap.fromTo(videoJoyy, { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.5)" });
+    }, 400);
+
+    // MASSIVE confetti explosion covering entire screen
+    function launchConfettiWave() {
+      const colors = ['#EF476F', '#FFD166', '#06D6A0', '#118AB2', '#FF69B4', '#FFE66D', '#FF6B6B', '#C44DFF'];
+      const shapes = ['50%', '0%', '30%'];
+      for (let i = 0; i < 40; i++) {
+        let p = document.createElement('div');
+        const size = Math.random() * 14 + 6;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const borderRadius = shapes[Math.floor(Math.random() * shapes.length)];
+        p.style.cssText = `position:fixed; width:${size}px; height:${size}px; background:${color}; border:2px solid rgba(0,0,0,0.3); border-radius:${borderRadius}; pointer-events:none; z-index:99999;`;
+        p.style.left = Math.random() * window.innerWidth + 'px';
+        p.style.top = '-20px';
+        confettiContainer.appendChild(p);
+
+        gsap.to(p, {
+          y: window.innerHeight + 100 + Math.random() * 200,
+          x: (Math.random() - 0.5) * 400,
+          rotation: Math.random() * 720 - 360,
+          duration: Math.random() * 2 + 1.5,
+          ease: "power1.out",
+          opacity: 0,
+          delay: Math.random() * 0.5,
+          onComplete: () => p.remove()
+        });
+      }
+    }
+
+    // Fire multiple waves of confetti
+    launchConfettiWave();
+    setTimeout(launchConfettiWave, 500);
+    setTimeout(launchConfettiWave, 1000);
+    setTimeout(launchConfettiWave, 1500);
+    setTimeout(launchConfettiWave, 2000);
+    setTimeout(launchConfettiWave, 2500);
+
+    // Side cannons
+    function sideCannon(fromLeft) {
+      const colors = ['#EF476F', '#FFD166', '#06D6A0', '#FF69B4', '#C44DFF'];
+      for (let i = 0; i < 25; i++) {
+        let p = document.createElement('div');
+        const size = Math.random() * 12 + 5;
+        p.style.cssText = `position:fixed; width:${size}px; height:${size}px; background:${colors[Math.floor(Math.random() * colors.length)]}; border:2px solid rgba(0,0,0,0.2); border-radius:${Math.random() > 0.5 ? '50%' : '2px'}; pointer-events:none; z-index:99999;`;
+        p.style.left = fromLeft ? '0px' : window.innerWidth + 'px';
+        p.style.top = Math.random() * window.innerHeight * 0.5 + 'px';
+        confettiContainer.appendChild(p);
+
+        gsap.to(p, {
+          x: fromLeft ? (Math.random() * window.innerWidth * 0.7 + 50) : -(Math.random() * window.innerWidth * 0.7 + 50),
+          y: Math.random() * 400 + 100,
+          rotation: Math.random() * 720,
+          duration: Math.random() * 1.5 + 1,
+          ease: "power2.out",
+          opacity: 0,
+          delay: Math.random() * 0.3,
+          onComplete: () => p.remove()
+        });
+      }
+    }
+
+    setTimeout(() => sideCannon(true), 300);
+    setTimeout(() => sideCannon(false), 600);
+    setTimeout(() => sideCannon(true), 1200);
+    setTimeout(() => sideCannon(false), 1800);
+
+    // Navigate to warning page after celebration
+    setTimeout(() => {
+      barba.go('warning.html');
+    }, 5000);
+  });
+}
+
 function initMinigame() {
   speakCat("Get 20 Hearts!", "surprised", 5000);
   const canvas = document.getElementById('game-canvas');
@@ -1078,82 +1265,4 @@ if(typeof barba !== 'undefined') {
       }
     }]
   });
-  });
-}
-
-function initLunchDate() {
-  speakCat("Say yes!!", "love", 5000);
-  const yesBtn = document.getElementById('yes-btn');
-  const noBtn = document.getElementById('no-btn');
-  const dateVideo = document.getElementById('date-video');
-  const dateImage = document.getElementById('date-image');
-  const dateText = document.getElementById('date-text');
-  const nextBtn = document.getElementById('to-warning-btn');
-  const btnContainer = document.getElementById('btn-container');
-
-  const moveNoButton = () => {
-     dateVideo.classList.add('hidden');
-     dateImage.classList.remove('hidden');
-     dateText.classList.remove('hidden');
-     
-     const maxX = window.innerWidth - noBtn.offsetWidth - 20;
-     const maxY = window.innerHeight - noBtn.offsetHeight - 20;
-     const randomX = Math.max(10, Math.random() * maxX);
-     const randomY = Math.max(10, Math.random() * maxY);
-     
-     gsap.to(noBtn, {
-        position: 'fixed',
-        left: randomX,
-        top: randomY,
-        duration: 0.2,
-        ease: "power1.out"
-     });
-  };
-
-  if(noBtn) {
-    noBtn.addEventListener('mouseenter', moveNoButton);
-    noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNoButton(); }, {passive: false});
-  }
-  
-  if(yesBtn) {
-    yesBtn.addEventListener('click', () => {
-       dateImage.classList.add('hidden');
-       dateVideo.classList.remove('hidden');
-       dateText.classList.add('hidden');
-       
-       dateVideo.src = "responsevids/joyy.mp4";
-       dateVideo.play().catch(e => console.log('Autoplay prevented', e));
-       
-       noBtn.style.display = 'none';
-       
-       if(window.confetti) {
-           var duration = 4000;
-           var end = Date.now() + duration;
-
-           (function frame() {
-             confetti({
-               particleCount: 5,
-               angle: 60,
-               spread: 55,
-               origin: { x: 0 },
-               colors: ['#EF476F', '#FFD166', '#06D6A0', '#118AB2']
-             });
-             confetti({
-               particleCount: 5,
-               angle: 120,
-               spread: 55,
-               origin: { x: 1 },
-               colors: ['#EF476F', '#FFD166', '#06D6A0', '#118AB2']
-             });
-
-             if (Date.now() < end) {
-               requestAnimationFrame(frame);
-             }
-           }());
-       }
-       
-       nextBtn.classList.remove('hidden');
-       gsap.fromTo(nextBtn, {scale: 0, opacity: 0}, {scale: 1, opacity: 1, duration: 0.5, delay: 0.5, ease: "back.out(1.5)"});
-    });
-  }
 }
