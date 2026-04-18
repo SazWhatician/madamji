@@ -352,55 +352,21 @@ function initGlobalUI() {
     });
   }
 
-  // Setup Audio Button
-  const audioBtn = document.getElementById('audio-control');
+  // Setup Audio (Always loop, no stop)
   const audioEl = document.getElementById('bg-music');
-  if (audioBtn && audioEl && !audioBtn.dataset.eventsAttached) {
-    audioBtn.dataset.eventsAttached = 'true';
-    audioBtn.addEventListener('click', () => {
-      audioInit = true;
-      if (isAudioPlaying) {
-         audioEl.pause();
-         audioBtn.innerText = '🔇';
-         audioBtn.classList.remove('playing');
-      } else {
-         audioEl.play().catch(e => console.log('Audio error:', e));
-         audioBtn.innerText = '🎵';
-         audioBtn.classList.add('playing');
-      }
-      isAudioPlaying = !isAudioPlaying;
-    });
-
-    // Try autoplay immediately (on page load)
-    let playAttempt = () => {
-      if (!audioInit) {
-        audioEl.volume = 0.5;
-        audioEl.play().then(() => {
-          isAudioPlaying = true;
-          audioInit = true;
-          audioBtn.innerText = '🎵';
-          audioBtn.classList.add('playing');
-        }).catch(e => {
-          console.log('Autoplay prevented by browser, waiting for user interaction');
-        });
-      }
+  if (audioEl && !document.body.dataset.audioBound) {
+    document.body.dataset.audioBound = 'true';
+    
+    let tryPlay = () => {
+      audioEl.volume = 0.5;
+      audioEl.play().catch(e => console.log('Autoplay prevented, will play on interaction'));
     };
-    playAttempt();
-
-    // Auto prompt audio on first click anywhere as fallback
-    document.body.addEventListener('click', () => {
-      if (!audioInit) {
-        audioInit = true;
-        audioEl.volume = 0.5;
-        audioEl.play().then(() => {
-          isAudioPlaying = true;
-          audioBtn.innerText = '🎵';
-          audioBtn.classList.add('playing');
-        }).catch(e => {
-          console.log('Autoplay prevented on specific user interaction');
-        });
-      }
-    }, { once: true });
+    
+    tryPlay();
+    
+    // Bind to all clicks and touches globally to ensure the music stays active
+    document.body.addEventListener('click', tryPlay);
+    document.body.addEventListener('touchstart', tryPlay, {passive: true});
   }
 
   setupEasterEggs();
@@ -536,12 +502,12 @@ function setupEasterEggs() {
 
     if (keyBuffer.includes('remember?')) {
       keyBuffer = ''; // reset
-      barba.go('page5.html'); // manually trigger barba transition
+      barba.go('axs.html'); // manually trigger barba transition
     }
 
     if (keyBuffer.includes('iloveyoutoo')) {
       keyBuffer = '';
-      barba.go('page6.html');
+      barba.go('secret.html');
     }
   });
 }
@@ -613,118 +579,254 @@ function initEnvelope() {
         .set(flap, { zIndex: 5 })
         // Rise bouquet
         .to(bouquet, { scale: 1, y: -40, duration: 1.2, ease: "elastic.out(1, 0.6)" })
-        // Show next button
-        .to(nextBtn, { opacity: 1, pointerEvents: 'auto', duration: 0.5 }, "-=0.5")
         // Tiny jump animation for the env
         .to(envelope, { y: 20, duration: 0.3, yoyo: true, repeat: 1 }, "-=1.5");
         
       speakCat("Awww! Sunflowers!", "love", 4000);
+
+      // Start continuous confetti shower
+      let confettiInterval = setInterval(() => {
+         fireConfettiAt(window.innerWidth / 2 + (Math.random() - 0.5) * 400, 50);
+      }, 100);
+
+      // After 2.5s, transition to page3.html
+      setTimeout(() => {
+         clearInterval(confettiInterval);
+         barba.go('page3.html');
+      }, 2500);
     });
   }
 }
 
-function initGallery() {
-  speakCat("Watch the video!", "surprised", 4000);
-  const video = document.getElementById('madamji-video');
-  const tvContainer = document.getElementById('tv-container');
-  const gallery = document.getElementById('photo-gallery');
-  const skipBtn = document.getElementById('skip-video-btn');
-  const nextBtn = document.getElementById('next-btn-3');
-  let galleryShown = false;
+function initVibe() {
+  speakCat("Vibes!", "love", 4000);
+  const video = document.getElementById('vibe-video');
+  if (video) {
+    video.play().catch(e => console.log('Video autoplay prevented', e));
+    video.addEventListener('ended', () => {
+      let bgm = document.getElementById('bg-music');
+      if(bgm) bgm.play().catch(()=>{});
+      barba.go('page4.html');
+    });
+  }
+}
 
-  function showGallery() {
-    if (galleryShown) return;
-    galleryShown = true;
-    if(video) video.pause();
-    
-    speakCat("Wow, so cute!", "love", 4000);
-    
-    // Animate TV away
-    gsap.to(tvContainer, { scale: 0, opacity: 0, duration: 0.8, ease: "power2.in", onComplete: () => {
-      tvContainer.style.display = 'none';
-      
-      // Inject gallery photos with 3D Flip capability
-      gallery.innerHTML = galleryData.map(d => `
-        <div class="polaroid-container opacity-0 translate-y-10 w-full aspect-[4/5] relative" style="perspective: 1000px; cursor: pointer;">
-          <div class="polaroid-inner w-full h-full relative transition-transform duration-700 hover:rotate-${Math.random() > 0.5 ? '2' : '-2'}" style="transform-style: preserve-3d;">
-            <!-- Front -->
-            <div class="polaroid-front absolute w-full h-full bg-white border-4 border-[var(--dark)] flex flex-col p-3 pb-12 brutal-shadow" style="-webkit-backface-visibility: hidden; backface-visibility: hidden;">
-               <img src="picssss/${d.img}" alt="memory" loading="lazy" class="w-full aspect-square object-cover border-4 border-[var(--dark)] pointer-events-none">
-               <p class="handwriting mt-4 text-[var(--dark)] text-lg text-center pointer-events-none">${d.cap}</p>
-            </div>
-            <!-- Back -->
-            <div class="polaroid-back absolute w-full h-full bg-[#FFE4B5] border-4 border-[var(--dark)] flex-center flex-col brutal-shadow" style="-webkit-backface-visibility: hidden; backface-visibility: hidden; transform: rotateY(180deg);">
-               <p class="handwriting text-3xl text-[#EF476F] text-center p-6">I love you more than words can say! 🥰💕</p>
-            </div>
-          </div>
-        </div>
-      `).join('');
-      
-      gallery.style.display = 'grid';
-      
-      gsap.to('.polaroid-container', { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'back.out(1.2)' });
-      gsap.to(nextBtn, { opacity: 1, pointerEvents: 'auto', duration: 0.5, delay: 1 });
+function initLuvPic() {
+  speakCat("Perfection!", "happy", 3000);
+  
+  // Awwwards-style reveal
+  let tl = gsap.timeline();
+  tl.to('.polaroid-container', {
+    scale: 1,
+    rotation: 0,
+    opacity: 1,
+    duration: 1.5,
+    ease: "elastic.out(1, 0.5)"
+  });
 
-      // Add 3D Tilt interaction and Flip Click
-      document.querySelectorAll('.polaroid-container').forEach(card => {
-        const inner = card.querySelector('.polaroid-inner');
-        let isFlipped = false;
-        
-        card.addEventListener('click', () => {
-          isFlipped = !isFlipped;
-          gsap.to(inner, {
-             rotationY: isFlipped ? 180 : 0,
-             duration: 0.8,
-             ease: "back.out(1.5)"
-          });
-        });
+  // Floating Hearts background
+  const heartsBg = document.getElementById('hearts-bg');
+  if (heartsBg) {
+    for (let i = 0; i < 20; i++) {
+        let h = document.createElement('div');
+        h.innerHTML = '💖';
+        h.style.position = 'absolute';
+        h.style.left = Math.random() * 100 + 'vw';
+        h.style.top = Math.random() * 100 + 'vh';
+        h.style.fontSize = (Math.random() * 20 + 20) + 'px';
+        h.style.opacity = '0';
+        heartsBg.appendChild(h);
 
-        card.addEventListener('mousemove', (e) => {
-           if (isFlipped) return; // disable tilt when flipped
-           const rect = card.getBoundingClientRect();
-           const x = e.clientX - rect.left;
-           const y = e.clientY - rect.top;
-           const centerX = rect.width / 2;
-           const centerY = rect.height / 2;
-           const rotateX = ((y - centerY) / centerY) * -15; 
-           const rotateY = ((x - centerX) / centerX) * 15;
-           
-           gsap.to(card, {
-             rotationX: rotateX,
-             rotationY: rotateY,
-             transformPerspective: 1000,
-             duration: 0.4,
-             ease: "power2.out"
-           });
+        gsap.to(h, {
+          y: -200,
+          opacity: Math.random() * 0.5 + 0.3,
+          rotation: Math.random() * 360,
+          duration: Math.random() * 2 + 3,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut"
         });
-        
-        card.addEventListener('mouseleave', () => {
-           gsap.to(card, {
-             rotationX: 0,
-             rotationY: 0,
-             duration: 0.6,
-             ease: "elastic.out(1, 0.5)"
-           });
-        });
-      });
-      // Re-initialize hover listeners for custom cursor on new DOM elements
-      initCursorLogic();
-    }});
+    }
   }
 
+  // Go to next page after 3 seconds
+  setTimeout(() => {
+    barba.go('page5.html');
+  }, 3000);
+}
+
+function initFolderGallery() {
+  speakCat("Watch the video!", "surprised", 4000);
+  const video = document.getElementById('madamji-video');
+  const videoCont = document.getElementById('madamji-vid-container');
+  const folder = document.getElementById('win-folder-widget');
+  const scatter = document.getElementById('scatter-gallery');
+  const scrollHint = document.getElementById('scroll-hint');
+  const nextBtn = document.getElementById('next-btn-5');
+  let folderShown = false;
+  let galleryActive = false;
+  let currentIndex = 0;
+  let polaroidElements = [];
+
+  // Hide the folder initially via GSAP to ensure no layout bugs
+  gsap.set(folder, { y: 500, scale: 0, opacity: 0, pointerEvents: 'none' });
+
   if (video) {
-    video.addEventListener('ended', showGallery);
+    video.addEventListener('ended', () => {
+       if (folderShown) return;
+       folderShown = true;
+       let bgm = document.getElementById('bg-music');
+       if(bgm) bgm.play().catch(()=>{});
+       speakCat("A folder!", "happy", 3000);
+       // Fly the folder in from the bottom
+       gsap.to(folder, { y: 0, scale: 1, opacity: 1, pointerEvents: 'auto', duration: 1.2, ease: "back.out(1.2)" });
+    });
     // Auto play policy
     video.play().catch(e => console.log('Video autoplay prevented', e));
   }
-  
-  if (skipBtn) skipBtn.addEventListener('click', showGallery);
-  
-  // Fake Knobs
-  if(document.getElementById('tv-knob-1')) {
-    document.getElementById('tv-knob-1').addEventListener('click', function() {
-      gsap.to(this.firstElementChild, { rotation: "+=45", duration: 0.2 });
+
+  folder.addEventListener('click', () => {
+    if (galleryActive) return;
+    galleryActive = true;
+    speakCat("So cute!!", "love", 4000);
+    if(video) video.pause();
+
+    // Hide video and folder smoothly
+    gsap.to(videoCont, { scale: 0, opacity: 0, rotation: -20, duration: 0.8, ease: "power2.in" });
+    gsap.to(folder, { scale: 0, opacity: 0, duration: 0.5, ease: "back.in(1.2)" });
+    
+    setTimeout(() => {
+      videoCont.style.display = 'none';
+      folder.style.display = 'none';
+      buildScatterGallery();
+    }, 800);
+  });
+
+  function buildScatterGallery() {
+    scrollHint.classList.remove('hidden');
+    gsap.to(scrollHint, { opacity: 1, duration: 1, delay: 1 });
+    gsap.to(nextBtn, { opacity: 1, pointerEvents: 'auto', duration: 1, delay: 2 });
+
+    scatter.style.pointerEvents = 'auto';
+
+    // Inject Photos
+    galleryData.forEach((d, i) => {
+      const el = document.createElement('div');
+      el.className = 'scatter-item';
+      el.dataset.index = i;
+      el.innerHTML = `
+        <div class="polaroid-inner w-full h-full relative transition-transform duration-700" style="transform-style: preserve-3d; cursor: pointer;">
+          <!-- Front -->
+          <div class="polaroid-front absolute w-full h-full bg-white border-4 border-[var(--dark)] flex flex-col p-3 pb-12 brutal-shadow" style="-webkit-backface-visibility: hidden; backface-visibility: hidden;">
+             <img src="picssss/${d.img}" alt="memory" class="w-full aspect-square object-cover border-4 border-[var(--dark)]">
+             <p class="handwriting mt-4 text-[var(--dark)] text-lg text-center">${d.cap}</p>
+          </div>
+          <!-- Back -->
+          <div class="polaroid-back absolute w-full h-full bg-[#FFE4B5] border-4 border-[var(--dark)] flex-center flex-col brutal-shadow" style="-webkit-backface-visibility: hidden; backface-visibility: hidden; transform: rotateY(180deg);">
+             <p class="handwriting text-2xl text-[#EF476F] text-center p-6">I love you more than words can say! 🥰💕</p>
+          </div>
+        </div>
+      `;
+      
+      scatter.appendChild(el);
+      polaroidElements.push(el);
+
+      // Flip logic
+      let isFlipped = false;
+      const inner = el.querySelector('.polaroid-inner');
+      el.addEventListener('click', () => {
+         isFlipped = !isFlipped;
+         gsap.to(inner, { rotationY: isFlipped ? 180 : 0, duration: 0.8, ease: "back.out(1.5)" });
+      });
     });
+
+    // Randomize initial positions (offscreen)
+    polaroidElements.forEach(el => {
+       gsap.set(el, { 
+         xPercent: -50, 
+         yPercent: -50,
+         x: (Math.random() - 0.5) * window.innerWidth * 2, 
+         y: window.innerHeight, 
+         rotation: Math.random() * 60 - 30 
+       });
+    });
+
+    updateGalleryFocus();
+
+    // Wheel listener for scrolling
+    window.addEventListener('wheel', (e) => {
+       if (!galleryActive) return;
+       if (e.deltaY > 0) {
+          currentIndex = (currentIndex + 1) % polaroidElements.length;
+       } else {
+          currentIndex = (currentIndex - 1 + polaroidElements.length) % polaroidElements.length;
+       }
+       updateGalleryFocus();
+       gsap.to(scrollHint, { opacity: 0, duration: 0.3 }); // hide hint once they figure it out
+    });
+    
+    // Add touch support for mobile gallery swap
+    let touchStartY = 0;
+    window.addEventListener('touchstart', e => touchStartY = e.touches[0].clientY, {passive:true});
+    window.addEventListener('touchend', e => {
+       if(!galleryActive) return;
+       let touchEndY = e.changedTouches[0].clientY;
+       if(touchEndY < touchStartY - 50) currentIndex = (currentIndex + 1) % polaroidElements.length;
+       if(touchEndY > touchStartY + 50) currentIndex = (currentIndex - 1 + polaroidElements.length) % polaroidElements.length;
+       updateGalleryFocus();
+       gsap.to(scrollHint, { opacity: 0, duration: 0.3 });
+    }, {passive:true});
+
+    // Re-init Custom Cursor
+    initCursorLogic();
+  }
+
+  function updateGalleryFocus() {
+     polaroidElements.forEach((el, index) => {
+        if (index === currentIndex) {
+           // Center focus
+           el.style.zIndex = 100;
+           gsap.to(el, {
+              x: 0,
+              y: 0,
+              rotation: 0,
+              scale: 1.2,
+              duration: 0.6,
+              ease: "back.out(1.2)"
+           });
+        } else {
+           // Scatter randomly
+           el.style.zIndex = 10;
+           gsap.to(el, {
+              x: (Math.random() - 0.5) * window.innerWidth * 0.6,
+              y: (Math.random() - 0.5) * window.innerHeight * 0.6,
+              rotation: Math.random() * 40 - 20,
+              scale: 0.7 + Math.random() * 0.3,
+              duration: 0.8,
+              ease: "power2.out"
+           });
+        }
+     });
+  }
+}
+
+function initYouPage() {
+  speakCat("Wow!", "happy", 3000);
+  
+  let tl = gsap.timeline();
+  tl.to('.polaroid-container', { opacity: 1, scale: 1, duration: 1.2, ease: "back.out(1.5)" })
+    .to('#you-message', { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }, "-=0.5");
+}
+
+function initWarning() {
+  speakCat("Oh no!", "surprised", 5000);
+  const video = document.getElementById('warning-video');
+  if(video) {
+     video.play().catch(e => console.log('Autoplay prevented', e));
+     video.addEventListener('ended', () => {
+        let bgm = document.getElementById('bg-music');
+        if(bgm) bgm.play().catch(()=>{});
+     });
   }
 }
 
@@ -765,6 +867,16 @@ function initMinigame() {
     updateBasket(e.touches[0].clientX);
     gsap.to(hint, {opacity: 0, duration: 0.3});
   }, {passive:true});
+
+  const mobileSlider = document.getElementById('mobile-basket-slider');
+  if (mobileSlider) {
+    mobileSlider.addEventListener('input', (e) => {
+      const val = parseInt(e.target.value, 10);
+      const x = (val / 100) * canvas.width;
+      updateBasket(x);
+      gsap.to(hint, {opacity: 0, duration: 0.3});
+    });
+  }
 
   // Heart object
   class Heart {
@@ -895,18 +1007,33 @@ function runPageLogic(namespace) {
     case 'envelope':
       initEnvelope();
       break;
-    case 'gallery':
-      initGallery();
+    case 'vibe':
+      initVibe();
+      break;
+    case 'luvpic':
+      initLuvPic();
+      break;
+    case 'folderGallery':
+      initFolderGallery();
+      break;
+    case 'youPage':
+      initYouPage();
       break;
     case 'minigame':
       initMinigame();
+      break;
+    case 'lunchDate':
+      initLunchDate();
+      break;
+    case 'warning':
+      initWarning();
       break;
     case 'secret1':
     case 'secret2':
       speakCat("Shhh... Secret page", "surprised", 4000);
       break;
     default:
-      console.log('Unknown namespace');
+      console.log('Unknown namespace: ' + namespace);
   }
 }
 
@@ -951,4 +1078,82 @@ if(typeof barba !== 'undefined') {
       }
     }]
   });
+  });
+}
+
+function initLunchDate() {
+  speakCat("Say yes!!", "love", 5000);
+  const yesBtn = document.getElementById('yes-btn');
+  const noBtn = document.getElementById('no-btn');
+  const dateVideo = document.getElementById('date-video');
+  const dateImage = document.getElementById('date-image');
+  const dateText = document.getElementById('date-text');
+  const nextBtn = document.getElementById('to-warning-btn');
+  const btnContainer = document.getElementById('btn-container');
+
+  const moveNoButton = () => {
+     dateVideo.classList.add('hidden');
+     dateImage.classList.remove('hidden');
+     dateText.classList.remove('hidden');
+     
+     const maxX = window.innerWidth - noBtn.offsetWidth - 20;
+     const maxY = window.innerHeight - noBtn.offsetHeight - 20;
+     const randomX = Math.max(10, Math.random() * maxX);
+     const randomY = Math.max(10, Math.random() * maxY);
+     
+     gsap.to(noBtn, {
+        position: 'fixed',
+        left: randomX,
+        top: randomY,
+        duration: 0.2,
+        ease: "power1.out"
+     });
+  };
+
+  if(noBtn) {
+    noBtn.addEventListener('mouseenter', moveNoButton);
+    noBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveNoButton(); }, {passive: false});
+  }
+  
+  if(yesBtn) {
+    yesBtn.addEventListener('click', () => {
+       dateImage.classList.add('hidden');
+       dateVideo.classList.remove('hidden');
+       dateText.classList.add('hidden');
+       
+       dateVideo.src = "responsevids/joyy.mp4";
+       dateVideo.play().catch(e => console.log('Autoplay prevented', e));
+       
+       noBtn.style.display = 'none';
+       
+       if(window.confetti) {
+           var duration = 4000;
+           var end = Date.now() + duration;
+
+           (function frame() {
+             confetti({
+               particleCount: 5,
+               angle: 60,
+               spread: 55,
+               origin: { x: 0 },
+               colors: ['#EF476F', '#FFD166', '#06D6A0', '#118AB2']
+             });
+             confetti({
+               particleCount: 5,
+               angle: 120,
+               spread: 55,
+               origin: { x: 1 },
+               colors: ['#EF476F', '#FFD166', '#06D6A0', '#118AB2']
+             });
+
+             if (Date.now() < end) {
+               requestAnimationFrame(frame);
+             }
+           }());
+       }
+       
+       nextBtn.classList.remove('hidden');
+       gsap.fromTo(nextBtn, {scale: 0, opacity: 0}, {scale: 1, opacity: 1, duration: 0.5, delay: 0.5, ease: "back.out(1.5)"});
+    });
+  }
 }

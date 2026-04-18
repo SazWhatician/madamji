@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A Secret For You</title>
+  <title>Gallery</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -12,7 +12,7 @@
   <div id="audio-control" class="brutal-border brutal-shadow">🎵</div>
   
   <div id="cat-guide-container">
-    <div class="speech-bubble" id="cat-speech">You found a secret!</div>
+    <div class="speech-bubble" id="cat-speech">A folder!</div>
     <div id="cat-svg-container"></div>
   </div>
 
@@ -22,28 +22,41 @@
     </svg>
   </div>
 
-  <main data-barba="container" data-barba-namespace="secret1">
-    <div class="page-container flex-center flex-col relative w-full min-h-screen bg-[#FDFBF7]">
+  <main data-barba="container" data-barba-namespace="folderGallery">
+    <div class="page-container flex-center flex-col relative w-full h-screen overflow-hidden bg-[var(--orange)]">
       
-      <div class="absolute top-8 left-8">
-        <button id="go-back-btn" class="brutal-btn secondary" onclick="window.history.back()">⬅️ Go Back</button>
+      <div class="fixed top-2 right-2 md:top-8 md:right-8 z-[100] scale-75 md:scale-100 origin-top-right">
+        <a href="page6.html" id="next-btn-5" class="brutal-btn primary hide-initially opacity-0 pointer-events-none transition-opacity">Next ➡️</a>
       </div>
 
-      <div class="max-w-2xl w-full p-8 md:p-12 brutal-border brutal-shadow-lg bg-[#fff8e7] relative mt-16" style="background-image: repeating-linear-gradient(transparent, transparent 31px, #e0d8c0 31px, #e0d8c0 32px); line-height: 32px; background-attachment: local;">
-        
-        <img src="picssss/axs.jpeg" alt="Us" class="w-2/3 max-w-sm mx-auto brutal-border brutal-shadow mb-8 rotate-3 transition-transform hover:rotate-0 duration-300">
-        
-        <h2 class="text-3xl text-[var(--dark)] mb-6 handwriting" style="line-height: normal;">My dearest Ankita,</h2>
-        
-        <p class="handwriting text-xl text-[var(--dark)] mb-6">
-          Do you remember this? Every time I look at this picture, I'm reminded of how unbelievably lucky I am. You make every ordinary moment feel so incredibly special. 
-        </p>
-        <p class="handwriting text-xl text-[var(--dark)] mb-6">
-          I wanted to make something that could even come close to showing you how much you mean to me. A whole website, just for my favorite person. 
-        </p>
-        <p class="handwriting text-xl text-[var(--dark)] text-right mt-12">
-          Love you always,<br>❤️
-        </p>
+      <!-- Video Container -->
+      <div id="madamji-vid-container" class="brutal-border brutal-shadow-lg p-3 bg-white w-8/12 max-w-xs md:max-w-sm rotate-[-2deg] transition-all duration-700 z-10 hover:rotate-1">
+        <video id="madamji-video" class="w-full h-auto border-4 border-black object-cover aspect-[9/16]" controls>
+          <source src="video/madamjiii.mp4" type="video/mp4">
+        </video>
+      </div>
+
+      <!-- Windows Folder (Initially Hidden) -->
+      <div id="win-folder-widget" class="win-folder brutal-shadow-lg scale-0 opacity-0 absolute z-20 mt-10">
+        <div class="win-header">
+           <span>C:\Memories\For_Ankita</span>
+           <span>_ ☐ X</span>
+        </div>
+        <div class="win-content">
+           <div class="folder-icon select-none transition-transform active:scale-95"></div>
+           <p class="font-sans text-black mt-2 text-sm font-bold truncate">Secret_Pics.zip</p>
+           <p class="font-sans text-xs mt-1 text-gray-700">(Click to extract)</p>
+        </div>
+      </div>
+
+      <!-- 3D Scatter Container -->
+      <div id="scatter-gallery">
+        <!-- Elements injected via JS -->
+      </div>
+      
+      <!-- Scroll Indicator -->
+      <div id="scroll-hint" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-white brutal-border brutal-shadow px-4 py-2 opacity-0 z-[60] handwriting pointer-events-none hidden">
+         Scroll to browse! 👇
       </div>
 
     </div>

@@ -229,25 +229,9 @@ h1, h2, h3, .heading {
   50% { transform: translateY(-5px) rotate(2deg); }
 }
 
-/* Audio control - spin when playing */
+/* Audio control - hidden per user request to loop seamlessly */
 #audio-control {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  width: 60px;
-  height: 60px;
-  background: white;
-  border-radius: 50%;
-  z-index: 9000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.8rem;
-  transition: transform 0.3s;
-}
-
-#audio-control:hover {
-  transform: scale(1.2) rotate(15deg);
+  display: none !important;
 }
 
 .playing {
@@ -367,3 +351,112 @@ h1, h2, h3, .heading {
   75% { transform: rotate(-2deg); }
 }
 
+/* --- Windows 95 Folder & Scatter Gallery --- */
+.win-folder {
+  background: #c0c0c0;
+  border-top: 2px solid white;
+  border-left: 2px solid white;
+  border-bottom: 2px solid #808080;
+  border-right: 2px solid #808080;
+  padding: 0;
+  display: inline-block;
+  cursor: pointer;
+}
+.win-header {
+  background: #000080;
+  color: white;
+  font-family: 'Tahoma', sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 2px 5px;
+  display: flex;
+  justify-content: space-between;
+}
+.win-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.folder-icon {
+  width: 60px;
+  height: 45px;
+  background: #ffcc00;
+  position: relative;
+  border: 1px solid black;
+  box-shadow: inset -2px -2px 0px rgba(0,0,0,0.3);
+}
+.folder-icon::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: -1px;
+  width: 30px;
+  height: 10px;
+  background: #ffcc00;
+  border: 1px solid black;
+  border-bottom: none;
+}
+
+#scatter-gallery {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  perspective: 1000px;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.scatter-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  aspect-ratio: 4/5;
+  transform-style: preserve-3d;
+  pointer-events: auto;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), z-index 0s;
+}
+
+@media (min-width: 768px) {
+  .scatter-item {
+     width: 250px;
+  }
+}
+@media (max-width: 768px) {
+  #cat-guide-container {
+    width: 95px;
+    bottom: 5px;
+    right: 5px;
+  }
+  .speech-bubble {
+    top: -50px;
+    left: -60px;
+    font-size: 0.95rem;
+    padding: 6px 12px;
+    min-width: 100px;
+  }
+}
+
+/* Danger Stripes for Warning Page */
+.danger-stripes {
+  background: repeating-linear-gradient(
+    -45deg,
+    #ffcc00,
+    #ffcc00 20px,
+    #000000 20px,
+    #000000 40px
+  );
+  background-size: 56.56px 56.56px;
+  animation: slideStripes 1s linear infinite;
+  border: 4px solid red;
+}
+
+@keyframes slideStripes {
+  0% { background-position: 0 0; }
+  100% { background-position: 56.56px 0; }
+}
