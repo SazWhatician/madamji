@@ -38,7 +38,7 @@
       </div>
 
       <!-- Minigame Player Basket -->
-      <div id="basket" class="absolute bottom-16 left-1/2 transform -translate-x-1/2 text-5xl z-20" style="touch-action: none; cursor: crosshair;">
+      <div id="basket" class="absolute bottom-16 left-1/2 transform -translate-x-1/2 text-4xl md:text-5xl z-20" style="touch-action: none; cursor: crosshair;">
         🧺
       </div>
 
@@ -46,26 +46,26 @@
       <input type="range" id="mobile-basket-slider" min="0" max="100" value="50" class="absolute bottom-8 w-11/12 max-w-sm z-30 md:hidden brutal-border accent-[var(--pink)]">
 
       <!-- Birthday Card (Appears after winning state) -->
-      <div id="final-card" class="brutal-card p-8 md:p-12 z-30 max-w-2xl text-center flex flex-col items-center justify-center opacity-0 scale-50 pointer-events-none">
-        <h1 class="text-4xl md:text-6xl text-[var(--pink)] mb-6 font-bold" style="-webkit-text-stroke: 2px #073B4C;">Happy Birthday!</h1>
-        <p class="handwriting text-2xl md:text-3xl text-[var(--dark)] mb-6 leading-relaxed">
+      <div id="final-card" class="brutal-card p-4 md:p-12 z-30 w-11/12 max-w-2xl text-center flex flex-col items-center justify-center opacity-0 scale-50 pointer-events-none">
+        <h1 class="text-3xl md:text-6xl text-[var(--pink)] mb-4 md:mb-6 font-bold" style="-webkit-text-stroke: 1.5px #073B4C;">Happy Birthday!</h1>
+        <p class="handwriting text-xl md:text-3xl text-[var(--dark)] mb-4 md:mb-6 leading-relaxed">
           I hope this year brings you as much joy and happiness as you bring to everyone around you. You are amazing, beautiful, and absolutely perfect. Have the sweetest birthday ever! 🌻💖
         </p>
-        <div class="flex gap-4 mb-4">
+        <div class="flex gap-4 mb-2 md:mb-4">
            <!-- SVG flowers will be injected here if needed, or simple emojis -->
-           <span class="text-4xl">🌻</span>
-           <span class="text-4xl">💖</span>
-           <span class="text-4xl">🐱</span>
-           <span class="text-4xl">🐶</span>
+           <span class="text-2xl md:text-4xl">🌻</span>
+           <span class="text-2xl md:text-4xl">💖</span>
+           <span class="text-2xl md:text-4xl">🐱</span>
+           <span class="text-2xl md:text-4xl">🐶</span>
         </div>
         
-        <p class="mt-4 text-sm text-gray-500 font-sans italic">...psst, ask me about the secret words.</p>
+        <p class="mt-2 md:mt-4 text-xs md:text-sm text-gray-500 font-sans italic">...psst, ask me about the secret words.</p>
 
-        <a href="lunchdate.html" class="brutal-btn primary mt-8 transform hover:scale-110" style="pointer-events: auto;">Finish ➡️</a>
+        <a href="lunchdate.html" class="brutal-btn primary mt-4 md:mt-8 transform hover:scale-110" style="pointer-events: auto;">Finish ➡️</a>
       </div>
 
       <!-- Overlay hint to use mouse/touch -->
-      <div id="game-hint" class="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 handwriting text-3xl bg-[var(--sunflower)] brutal-border p-4 brutal-shadow z-10 pointer-events-none">
+      <div id="game-hint" class="absolute top-1/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 handwriting text-xl md:text-3xl bg-[var(--sunflower)] brutal-border p-3 md:p-4 brutal-shadow z-10 pointer-events-none">
         Drag the basket to catch hearts! 👆
       </div>
 

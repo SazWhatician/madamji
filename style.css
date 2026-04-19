@@ -71,6 +71,20 @@ body {
   animation: spinCursor 4s linear infinite;
 }
 
+/* Shrink cursor for mobile */
+@media (max-width: 768px) {
+  #custom-cursor {
+    width: 12px;
+    height: 12px;
+    border-width: 2px;
+  }
+  #custom-cursor-follower {
+    width: 30px;
+    height: 30px;
+    border-width: 2px;
+  }
+}
+
 @keyframes spinCursor {
   100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
