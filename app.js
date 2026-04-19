@@ -721,7 +721,7 @@ function initFolderGallery() {
           </div>
           <!-- Back -->
           <div class="polaroid-back absolute w-full h-full bg-[#FFE4B5] border-4 border-[var(--dark)] flex-center flex-col brutal-shadow" style="-webkit-backface-visibility: hidden; backface-visibility: hidden; transform: rotateY(180deg);">
-             <p class="handwriting text-2xl text-[#EF476F] text-center p-6">I love you more than words can say! 🥰💕</p>
+             <p class="handwriting text-2xl text-[#EF476F] text-center p-6">happy birthday bhonduuuuu</p>
           </div>
         </div>
       `;
