@@ -281,16 +281,14 @@ function generateBouquetHTML() {
 }
 
 const galleryData = [
-  { img: 'WhatsApp Image 2026-04-17 at 2.10.28 AM.jpeg', cap: 'This smile lights up my world 🌞' },
-  { img: 'bhondu.jpeg', cap: 'My adorable little bhondu 🥺' },
-  { img: 'cuteipieee.jpeg', cap: 'Cutie pie overload! 💕' },
-  { img: 'donuts.jpeg', cap: 'Sweeter than all the donuts! 🍩' },
-  { img: 'heartemoji.jpeg', cap: 'You ARE the heart emoji ❤️' },
-  { img: 'heartemojiwitharrow.jpeg', cap: "Cupid's got nothing on you 💘" },
-  { img: 'potato.jpeg', cap: 'My little potato 🥔✨' },
-  { img: 'precious.jpeg', cap: 'Precious beyond words 💎' },
-  { img: 'sweetie.jpeg', cap: 'The sweetest human alive 🍯' },
-  { img: 'yummy.jpeg', cap: 'Too cute to handle! 😋' }
+  { img: 'bebo.jpeg', cap: 'jawdrop hogaya ji' },
+  { img: 'precious.jpeg', cap: 'so precious wtf' },
+  { img: 'potato.jpeg', cap: 'laughing bhondu' },
+  { img: 'heartemojiwitharrow.jpeg', cap: 'pretty pretty' },
+  { img: 'heartemoji.jpeg', cap: '*gets a nosebleed*' },
+  { img: 'donuts.jpeg', cap: 'donutsssssss' },
+  { img: 'bhondu.jpeg', cap: 'my favorite onee <3' },
+  { img: 'yummy.jpeg', cap: 'busy disecting a donut' }
 ];
 
 // ==========================================
